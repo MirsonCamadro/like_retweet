@@ -1,0 +1,46 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tweets</h1>
+
+  <% @tweets.each do |tweet| %>
+    <div class="row justify-content-md-center">
+      <div class="col-1">
+        <%= image_tag(tweet.user.avatar_url, class: "photo-avatar-post rounded-circle " , width: "20%", alt: "Avatar Post")%>
+      </div>
+      <div class="col-9">
+        <% if tweet.owner_id.nil? %>
+          <%= tweet.content %>
+        <% else%>
+        <div class="container">
+          <div class="row">
+            <div>
+                <%= image_tag(tweet.origin_tweet.user.avatar_url, class: "photo-avatar-post rounded-circle " , width: "5%", alt: "Avatar Post")%>
+                <%= tweet.origin_tweet.user.name%> dice
+            </div>
+          </div>
+        </div>
+
+          <%= tweet.content %>
+        <% end%>
+      </div>
+    </div>
+     <div class="row justify-content-md-center">
+      <div class="offset-sm-1">
+          <%= link_to "#{distance_of_time_in_words(Time.now, tweet.created_at)}", tweet%> 
+          <%= link_to "Like", tweet_likes_path(tweet), method: :post %> <%= tweet.likes.count%> \ 
+          <%= link_to "retweet", tweet_retweet_path(tweet), method: :post %> 
+      </div>
+    </div>
+
+  <% end %>
+
+    <div class="p-4">
+        <div class="text-center">
+            <%= link_to_prev_page @tweets, "Show less Tweets", class: "btn btn-primary btn-sm text-11" %>
+            <i class="btn btn-light btn-sm text-13 "><%= @tweets.current_page %></i>
+            <%= link_to_next_page @tweets, "Shore more Tweets", class:"btn btn-primary btn-sm text-11"%>
+        </div>
+    </div>
+<br>
+
+<%= link_to 'New Tweet', new_tweet_path %>
